@@ -1,0 +1,14 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+
+GET    /item/low                    controllers.ItemController.showAllLowStock()
+GET    /item/category/:category     controllers.ItemController.showAllForCategory(category:String)
+GET    /item/:id                    controllers.ItemController.getItem(id)
+POST   /item                        controllers.ItemController.createItem()
+POST   /item/:id/stock              controllers.ItemController.updateItemStock(id)
+DELETE /item/:id                    controllers.ItemController.deleteItem(id)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
