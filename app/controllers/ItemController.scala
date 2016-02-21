@@ -29,7 +29,8 @@ class ItemController @Inject()(val reactiveMongoApi: ReactiveMongoApi)
     mapping(
       "name"      -> nonEmptyText,
       "category"  -> nonEmptyText,
-      "stock"     -> number(min = 0, max = 1000)
+      "stock"     -> number(min = 0, max = 1000),
+      "price"     -> bigDecimal.verifying(value => value > BigDecimal(0))
     )(ItemForm.apply)(ItemForm.unapply)
   )
 
@@ -88,7 +89,7 @@ class ItemController @Inject()(val reactiveMongoApi: ReactiveMongoApi)
         Future.successful(BadRequest("Invalid data"))
       },
       valid => {
-        val item = Item(UUID.randomUUID(),valid.name,valid.category,valid.stock)
+        val item = Item(UUID.randomUUID(),valid.name,valid.category,valid.stock,valid.price)
         dbService.create(item) map {
           case Right(x) => Ok(s"Item: ${x._id.toString} added successfully")
           case Left(s)  => BadRequest(s)
